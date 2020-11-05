@@ -48,8 +48,8 @@ module fetch(input clk, input reset,
 			end
 		else if (ena)
 			begin
-				instruccion <= d[7:4];
 				operando <= d[3:0];
+				instruccion <= d[7:4];
 			end
 	end
 endmodule
@@ -81,16 +81,16 @@ module preparacion(input clk, input reset,
 
 
 
-	output wire [3:0]fetch_instruccion;
+	output wire [3:0]fetch_instruccions;
 	output wire [3:0]fetch_operando;
 
 	fetch ftc(.clk(clk), .reset(reset),
 		  .ena(enabled_fetch),
 		  .d(out_ROM),
-		  .instruccion(fetch_intruccion), .operando(fetch_operando) );
+		  .instruccion(fetch_instruccions), .operando(fetch_operando) );
 
 assign program_byte = out_ROM;
-assign intsr = fetch_intruccion;
+assign intsr = fetch_instruccions;
 assign oprnd = fetch_operando;
 
 
