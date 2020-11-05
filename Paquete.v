@@ -53,3 +53,45 @@ module fetch(input clk, input reset,
 			end
 	end
 endmodule
+
+
+
+//preparacion de control
+
+module preparacion(input clk, input reset,
+		   input logic load_counter, input logic ena_load_counter,
+		   input logic enabled_ct, input logic enabled_fetch,
+		   input logic [11:0]in_dato,
+		   output wire [7:0]program_byte, output wire [3:0]intsr, output wire [3:0]oprnd);
+
+
+	output wire [11:0]out_counter;
+
+	counter co1(.clk(clk), .reset(reset),
+		    .load(ena_load_counter), .enabled(enabled_ct),
+		    .d(in_dato),
+		    .q(out_counter) );
+
+
+
+
+	wire [7:0]out_ROM;
+
+	memoria_ROM r1(.addres(out_counter), .data(out_ROM) );
+
+
+
+	output wire [3:0]fetch_instruccion;
+	output wire [3:0]fetch_operando;
+
+	fetch ftc(.clk(clk), .reset(reset),
+		  .ena(enabled_fetch),
+		  .d(out_ROM),
+		  .instruccion(fetch_intruccion), .operando(fetch_operando) );
+
+assign program_byte = out_ROM;
+assign intsr = fetch_intruccion;
+assign oprnd = fetch_operando;
+
+
+endmodule
