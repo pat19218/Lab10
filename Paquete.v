@@ -93,5 +93,61 @@ assign program_byte = out_ROM;
 assign intsr = fetch_instruccions;
 assign oprnd = fetch_operando;
 
+endmodule
 
+
+
+
+
+//parte 2
+module buftri(input ena, input [3:0]d, output logic [3:0]q);
+
+	always @ (*)
+		if (ena == 0)
+			q <= 1'bz;
+		else
+			q <= d;
+endmodule
+
+
+module accu(input clk, input reset, input ena, input [3:0]d, output logic [3:0]q);
+
+	always @ (posedge clk, posedge reset)
+		if (reset)
+			q <= 4'b0;
+		else if (ena)
+			q <= d;
+endmodule
+
+
+module ALU (input wire [3:0] A,B,
+	    input wire [2:0] funcion,
+	    output logic[3:0] resul
+			output carry, zero);
+
+reg[3:0] Alu_resultado;
+parameter f1 = 3'b000;
+parameter f2 = 3'b001;
+parameter f3 = 3'b010;
+parameter f4 = 3'b011;
+parameter f5 = 3'b100;
+
+always@(*) begin
+	case(funcion)
+		f1:
+			Alu_resultado = A;
+		f2:
+			Alu_resultado = A - B;
+		f3:
+			Alu_resultado = B;
+		f4:
+			Alu_resultado = A + B;
+		f5:
+			Alu_resultado = ~(A & B);
+
+		default: Alu_resultado = A + B;
+	endcase
+	assign resul = Alu_resultado;
+	assign carry = Alu_resultado[4];
+end
 endmodule
