@@ -1,3 +1,4 @@
+//couenter
 module counter #(parameter N=12)
 		(input logic clk, 
 		 input logic reset,
@@ -16,11 +17,8 @@ always@(posedge clk, posedge reset)
 
 endmodule
 
-
-
-
-
-module ROM(input wire [6:0]addr, output logic [12:0]data);
+//ROM
+module ROM(input wire [11:0]addr, output logic [7:0]data);
 
 reg[12:0] dato;
 
@@ -53,9 +51,7 @@ reg[12:0] dato;
 end
 endmodule
 
-
-
-
+//f.f.D
 module fetch(input clk, input reset, input ena, input [3:0]d, output logic [3:0]q);
 
 	always @ (posedge clk, posedge reset)
@@ -64,5 +60,34 @@ module fetch(input clk, input reset, input ena, input [3:0]d, output logic [3:0]
 		else if (ena)
 			q <= d;			
 endmodule
+
+//preparacion de control
+module preparacion(input clk, input reset, 
+		   input logic load_counter, input logic ena_load_counter,
+		   input logic enabled_ct, input logic enabled_fetch,
+		   input [11:0]in_dato
+		   output logic [7:0]program_byte, output logic [3:0]intsr, output logic [3:0]oprnd);
+
+	
+	output wire [11:0]out_counter;
+	
+	counter co1(.clk(clk), .reset(reset), 
+		    .load(ena_load_counter), .enabled(enabled_ct),
+		    .d(in_dato), 
+		    .q(out_counter) );
+
+
+	ROM(. );
+
+end module
+
+
+
+
+
+
+
+
+
 
 
