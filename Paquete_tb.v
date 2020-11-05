@@ -23,15 +23,14 @@ end
 
 
 
+
+
 always@(*)begin
 	#1 clk = ~clk;
 end
-
 always@(*)begin
 	#1 clk = ~clk;
 end
-
-
 initial
 	#100 $finish;		
 
