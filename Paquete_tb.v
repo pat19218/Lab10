@@ -2,10 +2,24 @@ module testbench();
 
 reg clk = 0;
 reg reset = 0;
-reg load = 0;
-reg enabled = 0;
+reg ena_load_counter = 0;
+reg loadCounter = 0;
+reg enabledCounter = 0;
+reg enabled_fetch = 0;
+reg dato = 0;
 reg [11:0]data;
-output wire[11:0]q;
+
+output wire[7:0]Program_byte;
+output wire[3:0]instruccion;
+output wire[3:0]operando;
+
+
+
+preparacion part1(clk, reset,
+								  loadCounter, ena_load_counter,
+									enabledCounter,  enabled_fetch,
+									dato,
+									Program_byte, instruccion, operando );
 
 
 
