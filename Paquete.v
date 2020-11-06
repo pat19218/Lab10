@@ -122,10 +122,10 @@ endmodule
 
 module ALU (input wire [3:0] A,B,
 	    input wire [2:0] funcion,
-	    output logic[3:0] resul
-			output carry, zero);
+	    output logic[3:0] resul,
+			output reg carry, zero);
 
-reg[3:0] Alu_resultado;
+reg[4:0] Alu_resultado;
 parameter f1 = 3'b000;
 parameter f2 = 3'b001;
 parameter f3 = 3'b010;
@@ -147,7 +147,37 @@ always@(*) begin
 
 		default: Alu_resultado = A + B;
 	endcase
+
 	assign resul = Alu_resultado;
 	assign carry = Alu_resultado[4];
+	assign zero = (Alu_resultado == 4'b0)? 4'd1:4'd0;
+
 end
+endmodule
+
+
+
+module operacion(input clk, input reset,
+								 input [3:0]dato_in,
+								 input enabled_tri_1, input enabled_tri_2, input enabled_acu,
+								 input [2:0] funcion,
+								 output [3:0]dato_out,
+								 output carry, zero);
+
+	wire [3:0]salida_bufer_in;
+
+	buftri datos_entrada(enabled_tri_1, dato_in, salida_bufer_in);
+
+
+	wire [3:0]salida_alu;
+	wire [3:0]salida_accu;
+
+	accu acumulador(clk, reset, enabled_acu, salida_alu,	salida_accu);
+
+
+	ALU	alu1(salida_accu, salida_bufer_in, funcion, salida_alu, carry, zero);
+
+
+	buftri datos_salida(enabled_tri_2, salida_alu, dato_out);
+
 endmodule
